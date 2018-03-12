@@ -72,7 +72,7 @@
     <action>
       <ereg regexp="c=IN IP4 ([[:alnum:]]*.[[:alnum:]]*.[[:alnum:]]*.[[:alnum:]]*)" search_in="msg" check_it="true" assign_to="dummy,remote_rtp_ip"/>
       <ereg regexp="m=audio ([[:alnum:]]*)" search_in="msg" check_it="true" assign_to="dummy,remote_rtp_port"/>
-      <assignstr assign_to="local_rtp_port" value="[field7]" />
+      <assignstr assign_to="local_rtp_port" value="[field0]" />
       <todouble assign_to="local_rtp_port" variable="local_rtp_port" />
       <add assign_to="local_rtp_port" variable="media_port_offset" />
       <assignstr assign_to="local_rtp_port" value="[$local_rtp_port]" /> 
