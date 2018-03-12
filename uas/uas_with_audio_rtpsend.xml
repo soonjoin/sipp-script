@@ -24,7 +24,7 @@
   <!-- are saved and used for following messages sent. Useful to test   -->
   <!-- against stateful SIP proxies/B2BUAs.                             -->
   
-  <Global variables="media_payload,media_duration" />  
+  <Global variables="media_payload,media_duration,media_port_offset" />  
   <init> 
     <nop> 
       <action> 
@@ -37,6 +37,7 @@
         <assignstr assign_to="media_payload" value="18" /> 
       </action> 
     </nop>
+
     <nop>
       <action>
         <strcmp assign_to="empty" variable="media_duration" value="" />              
@@ -47,6 +48,23 @@
       <action>
         <assignstr assign_to="media_duration" value="0" />
       </action>
+    </nop>
+
+    <nop>
+      <action>
+        <strcmp assign_to="empty" variable="media_port_offset" value="" />
+        <test assign_to="empty" compare="equal" variable="empty" value="0" />
+      </action>
+    </nop>
+    <nop condexec="empty">
+      <action>
+        <assign assign_to="media_port_offset" value="0" />
+      </action>
+    </nop>
+    <nop>
+      <action>
+        <todouble assign_to="media_port_offset" variable="media_port_offset" />
+      </action>
     </nop> 
   </init>  
 
@@ -54,6 +72,12 @@
     <action>
       <ereg regexp="c=IN IP4 ([[:alnum:]]*.[[:alnum:]]*.[[:alnum:]]*.[[:alnum:]]*)" search_in="msg" check_it="true" assign_to="dummy,remote_rtp_ip"/>
       <ereg regexp="m=audio ([[:alnum:]]*)" search_in="msg" check_it="true" assign_to="dummy,remote_rtp_port"/>
+      <assignstr assign_to="local_rtp_port" value="[field7]" />
+      <todouble assign_to="local_rtp_port" variable="local_rtp_port" />
+      <add assign_to="local_rtp_port" variable="media_port_offset" />
+      <assignstr assign_to="local_rtp_port" value="[$local_rtp_port]" /> 
+      <ereg regexp="([[:alnum:]]*).([[:alnum:]]*)" search_in="var" variable="local_rtp_port"  check_it="true" assign_to="dummy,local_rtp_port"/>
+      <log  message="local_rtp_port:[$local_rtp_port]"/>
     </action>
   </recv>
   <Reference variables="dummy" />
@@ -106,7 +130,7 @@
       s=-
       c=IN IP[media_ip_type] [media_ip]
       t=0 0
-      m=audio [field7] RTP/AVP [$media_payload]
+      m=audio [$local_rtp_port] RTP/AVP [$media_payload]
 
     ]]>
   </send>
@@ -120,7 +144,7 @@
   <!-- Play a pre-recorded RTP stream(loop)                             -->
   <nop>
     <action>
-      <exec command="rtp/rtpsend-sipp -l -d [$media_duration] -s [field7] -f rtp/payload_[$media_payload].rtp [$remote_rtp_ip]/[$remote_rtp_port]"/>
+      <exec command="rtp/rtpsend-sipp -l -d [$media_duration] -s [$local_rtp_port] -f rtp/payload_[$media_payload].rtp [$remote_rtp_ip]/[$remote_rtp_port]"/>
       <log  message="[$media_payload],[$remote_rtp_ip],[$remote_rtp_port]"/>
     </action>
   </nop>
