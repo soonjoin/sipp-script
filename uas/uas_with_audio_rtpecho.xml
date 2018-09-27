@@ -90,7 +90,7 @@
       s=-
       c=IN IP[media_ip_type] [media_ip]
       t=0 0
-      m=audio [$local_rtp_port] RTP/AVP [$media_payload]
+      m=audio [media_port] RTP/AVP [$media_payload]
 
     ]]>
   </send>
