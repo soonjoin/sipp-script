@@ -170,7 +170,7 @@
   <!-- Play a pre-recorded RTP stream(loop)                             -->
   <nop>
     <action>
-      <exec command="rtp/rtpsend-sipp -l -d [$media_duration] -s [$local_rtp_port] -f rtp/payload_[$media_payload].rtp [$remote_rtp_ip]/[$remote_rtp_port]"/>
+      <exec command="rtp/rtpsend-sipp -i -l -d [$media_duration] -s [$local_rtp_port] -f rtp/payload_[$media_payload].rtp [$remote_rtp_ip]/[$remote_rtp_port]"/>
       <log  message="[$media_payload],[$remote_rtp_ip],[$remote_rtp_port]"/>
     </action>
   </nop>
