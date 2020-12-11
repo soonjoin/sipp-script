@@ -39,7 +39,7 @@
     </nop>
   </init>
   
-  <recv request="INVITE" crlf="true">
+  <recv request="INVITE" crlf="true" rrs="true">
   </recv>
 
   <pause milliseconds="100"/>  
@@ -55,12 +55,28 @@
   <!-- message, all occurrences are concatenated (CRLF separated)       -->
   <!-- to be used in place of the '[last_*]' keyword.                   -->
 
+  <send>
+    <![CDATA[
+
+      SIP/2.0 100 Trying
+      [last_Via:]
+      [last_Record-route]
+      [last_From:]
+      [last_To:];tag=[pid]SIPpTag01[call_number]
+      [last_Call-ID:]
+      [last_CSeq:]
+      Content-Length: 0
+
+    ]]>
+  </send>
+
 <!--
   <send>
     <![CDATA[
 
       SIP/2.0 180 Ringing
       [last_Via:]
+      [last_Record-route]
       [last_From:]
       [last_To:];tag=[pid]SIPpTag01[call_number]
       [last_Call-ID:]
@@ -77,6 +93,7 @@
 
       SIP/2.0 183 Session Progress
       [last_Via:]
+      [last_Record-route]
       [last_From:]
       [last_To:];tag=[pid]SIPpTag01[call_number]
       [last_Call-ID:]
@@ -103,6 +120,7 @@
 
       SIP/2.0 200 OK
       [last_Via:]
+      [last_Record-route]
       [last_From:]
       [last_To:];tag=[pid]SIPpTag01[call_number]
       [last_Call-ID:]
