@@ -129,7 +129,7 @@
   <!-- By adding rrs="true" (Record Route Sets), the route sets         -->
   <!-- are saved and used for following messages sent. Useful to test   -->
   <!-- against stateful SIP proxies/B2BUAs.                             -->
-  <recv response="200" rtd="true" crlf="true">
+  <recv response="200" rtd="true" crlf="true" rrs="true">
     <action>
       <ereg regexp="c=IN IP4 ([[:alnum:]]*.[[:alnum:]]*.[[:alnum:]]*.[[:alnum:]]*)" search_in="msg" check_it="true" assign_to="dummy,remote_rtp_ip"/>
       <ereg regexp="m=audio ([[:alnum:]]*)" search_in="msg" check_it="true" assign_to="dummy,remote_rtp_port"/>
@@ -142,7 +142,7 @@
   <send>
     <![CDATA[
 
-      ACK sip:[$to_prefix][field0]@[remote_ip]:[remote_port] SIP/2.0
+      ACK [next_url] SIP/2.0
       Via: SIP/2.0/[transport] [local_ip]:[local_port];branch=[branch]
       From: [$from_prefix][field0] <sip:[$from_prefix][field0]@[local_ip]:[local_port]>;tag=[pid]SIPpTag09[call_number]
       To: [$to_prefix][field0] <sip:[$to_prefix][field0]@[remote_ip]:[remote_port]>[peer_tag_param]
@@ -151,6 +151,7 @@
       Contact: sip:[$from_prefix][field0]@[local_ip]:[local_port]
       Max-Forwards: 70
       Subject: Performance Test
+      [routes]
       Content-Length: 0
 
     ]]>
@@ -199,7 +200,7 @@
   <send retrans="500">
     <![CDATA[
 
-      BYE sip:[$to_prefix][field0]@[remote_ip]:[remote_port] SIP/2.0
+      BYE [next_url] SIP/2.0
       Via: SIP/2.0/[transport] [local_ip]:[local_port];branch=[branch]
       From: [$from_prefix][field0] <sip:[$from_prefix][field0]@[local_ip]:[local_port]>;tag=[pid]SIPpTag09[call_number]
       To: [$to_prefix][field0] <sip:[$to_prefix][field0]@[remote_ip]:[remote_port]>[peer_tag_param]
@@ -208,6 +209,7 @@
       Contact: sip:[$from_prefix][field0]@[local_ip]:[local_port]
       Max-Forwards: 70
       Subject: Performance Test
+      [routes]
       Content-Length: 0
 
     ]]>
